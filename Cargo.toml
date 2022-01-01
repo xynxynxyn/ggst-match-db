@@ -1,0 +1,19 @@
+[package]
+name = "ggst-match-db"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+lazy_static = "1"
+# Database stuff
+sqlx = { version = "0.5", features = [ "runtime-tokio-rustls", "postgres", "chrono" ] }
+tokio = { version = "1", features = ["full"] }
+dotenv = "0.15.0"
+chrono = "0.4"
+# Matchmaking
+bbt = "0.2.0"
+ggst-api = { path = "./ggst-api-rs" }
+# API
+# rocket = "0.5.0-rc.1"

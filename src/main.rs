@@ -30,11 +30,12 @@ impl Leaderboard {
     fn print_top_n(&self, n: usize) {
         let mut players = self.ratings.iter().collect::<Vec<_>>();
         players.sort_by(|a, b| a.1.mu().partial_cmp(&b.1.mu()).unwrap());
+        println!();
         println!("### TOP {} ###", n);
         for (i, (p, r)) in players.iter().rev().take(n).enumerate() {
             println!("#{:>4} {:<4.0}+-{:>3.0} {}", i + 1, r.mu(), r.sigma(), p);
         }
-        println!("### TOP {} ###", n);
+        println!();
     }
 }
 
@@ -57,17 +58,18 @@ async fn update_database(db: &mut Leaderboard) -> error::Result<()> {
 /// Only tracking celestial matches
 #[tokio::main]
 async fn main() {
-    // We update the database every 2 minutes
+    // We update the database every 1 minutes
     let mut interval = time::interval(time::Duration::from_secs(60));
     let mut db = Leaderboard::new();
     // Open database
     loop {
-        for _ in 0..10 {
+        for _ in 0..60 {
         interval.tick().await;
         if let Err(e) = update_database(&mut db).await {
             eprintln!("{}", e);
         };
 
-        db.print_top_n(40);
+        // Print top 100 every hour
+        db.print_top_n(100);
     };
 }}
